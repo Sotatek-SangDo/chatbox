@@ -21,6 +21,7 @@
                 <div class="panel-footer">
                     <div class="input-group">
                         <input type="text" class="form-control" id="input" placeholder="Enter your message...">
+                        <input type="hidden" name="room_id" value="{{$id}}">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="send">Send</button>
                         </span>
@@ -84,6 +85,7 @@
     <script type="text/javascript">
         $('#send').on('click', function () {
             let message = $('#input').val();
+            let room_id = $('input[name="room_id"]').val();
             $('#input').val('');
             let date = new Date().toLocaleString('vi-VI', { hour12: false })
             if (message != '') {
@@ -91,7 +93,7 @@
                     url: 'chatroom',
                     type: 'POST',
                     dataType: 'json',
-                    data: {message: message, date: date},
+                    data: {message: message, date: date, room_id: room_id},
                     success: function (response) {
                         console.log(response)
                     }
@@ -99,16 +101,19 @@
             }
         });
         window.Echo.private('chatroom').listen('ChatEvent', (e) => {
-            let auth = $('#auth').val();
-            let html = `<div class="mess">
-                            <strong>` + ((auth != e.user.id) ? e.user.name : 'me') + `:</strong>
-                            <p>${e.message.content}</p>
-                            <b class="position">${e.message.date}</b>
-                            <input type="hidden" id="user" value="${e.user.id}">
-                        </div>
-                        `;
-            $('#content').append(html);
-            addOwnClass(auth);
+            let room_id = $('input[name="room_id"]').val();
+            if(e.message.chat_room_id == room_id) {
+                let auth = $('#auth').val();
+                let html = `<div class="mess">
+                                <strong>` + ((auth != e.user.id) ? e.user.name : 'me') + `:</strong>
+                                <p>${e.message.content}</p>
+                                <b class="position">${e.message.date}</b>
+                                <input type="hidden" id="user" value="${e.user.id}">
+                            </div>
+                            `;
+                $('#content').append(html);
+                addOwnClass(auth);
+            }
         });
         function addOwnClass(auth) {
             let lastMess = $('.mess:last-child');

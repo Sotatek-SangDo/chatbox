@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
             $table->longText('content');
             $table->string('date');
             $table->unsignedInteger('user_id');
+            $table->integer('chat_room_id');
             $table->timestamps();
         });
     }

@@ -24,10 +24,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function home()
     {
-        $message = Message::with(['user'])->get();
-        return view('home',['message'=> $message]);
+        return view('welcome');
+    }
+
+    public function index($id)
+    {
+        $message = Message::with(['user'])->where('chat_room_id', $id)->get();
+        return view('home',['message'=> $message, 'id' => $id]);
     }
 
     public function chat(Request $request)
@@ -36,6 +42,7 @@ class HomeController extends Controller
         $message->content = $request['message'];
         $message->date = $request['date'];
         $message->user_id = Auth::user()->id;
+        $message->chat_room_id = $request['room_id'];
         $message->save();
         broadcast(new ChatEvent($message));
         return [

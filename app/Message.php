@@ -9,7 +9,7 @@ class Message extends Model
 {
     public $table = 'messages';
 
-    public $fillable = ['content', 'date', 'user_id'];
+    public $fillable = ['content', 'date', 'user_id', 'chat_room_id'];
 
     public function getDateAttribute()
     {
