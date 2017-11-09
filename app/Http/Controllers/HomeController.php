@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Events\ChatEvent;
 use App\Message;
 use Auth;
+use App\ChatRoom;
 
 class HomeController extends Controller
 {
@@ -27,7 +28,8 @@ class HomeController extends Controller
 
     public function home()
     {
-        return view('welcome');
+        $chatRooms = ChatRoom::all();
+        return view('welcome', ['chatRooms' => $chatRooms]);
     }
 
     public function index($id)
@@ -46,6 +48,23 @@ class HomeController extends Controller
         $message->save();
         broadcast(new ChatEvent($message));
         return [
+            'status' => true
+        ];
+    }
+
+    public function check(Request $request)
+    {
+        $room = ChatRoom::where('id', $request['room_id'])
+                        ->where('password', $request['pass'])
+                        ->first();
+        if(!$room) {
+            return [
+                'mess' => 'Password not correct!',
+                'status' => false
+            ];
+        }
+        return [
+            'url' => '/room-'.$request['room_id'],
             'status' => true
         ];
     }

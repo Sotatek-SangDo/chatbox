@@ -18,3 +18,5 @@ Route::get('/', 'HomeController@home')->name('home');
 Route::get('/room-{id}', 'HomeController@index')->name('home');
 
 Route::post('/chatroom', 'HomeController@chat')->name('comment');
+
+Route::post('/check-room', 'HomeController@check')->name('check-room');
