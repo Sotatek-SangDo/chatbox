@@ -13,10 +13,12 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@home')->name('home');
+Route::get('/', 'HomeController@home')->name('home-page');
 
 Route::get('/room-{id}', 'HomeController@index')->name('home');
 
 Route::post('/chatroom', 'HomeController@chat')->name('comment');
+
+Route::post('/store', 'HomeController@store')->name('add-room');
 
 Route::post('/check-room', 'HomeController@check')->name('check-room');

@@ -75,6 +75,10 @@
                 color: #000;
                 margin-top: 15px;
             }
+            .col-md-6,
+            label {
+                margin-top: 10px;
+            }
         </style>
     </head>
     <body>
@@ -92,10 +96,50 @@
             @endif
 
             <div class="content">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#create">Add room</button>
                 <div class="title m-b-md">
-                    Laravel
+                    Chat box
                 </div>
+                <div class="create">
+                    <!-- Modal -->
+                  <div class="modal fade" id="create" role="dialog">
+                    <div class="modal-dialog">
 
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Add room</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('add-room') }}" method="post">
+                                {{ csrf_field() }}
+                                <div class="form-group">
+                                        <label for="name" class="col-md-4 control-label">Room Name</label>
+                                        <div class="col-md-6">
+                                            <input type="text" id="name" class="form-control" name="room" required>
+                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pass" class="col-md-4 control-label">Password</label>
+                                    <div class="col-md-6">
+                                        <input type="password" id="pass" class="form-control" name="password" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-8 col-md-offset-4">
+                                        <button type="submit" class="btn btn-primary">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
                 <div class="links">
                     @foreach($chatRooms as $chatroom)
                         <a class="click" data-value="{{$chatroom['id']}}" data-toggle="modal">{{ $chatroom['room_name']}}</a>
@@ -111,7 +155,7 @@
                       <h4 class="modal-title">Enter pass</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="check-room" method="post">
+                        <form action="check-room" class="join" method="post">
                             <div class="form-group">
                                 <label for="password" class="col-md-4 control-label">Password</label>
                                 <div class="col-md-6">
@@ -147,7 +191,7 @@
             $('#room-id').val(room_id);
             $('#myModal').modal();
         })
-        $('form').submit(function(e) {
+        $('form.join').submit(function(e) {
             e.preventDefault();
             let url = $(this).attr('action');
             let id =  $('#room-id').val();

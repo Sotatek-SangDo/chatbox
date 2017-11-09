@@ -7,6 +7,7 @@ use App\Events\ChatEvent;
 use App\Message;
 use Auth;
 use App\ChatRoom;
+use Log;
 
 class HomeController extends Controller
 {
@@ -67,5 +68,14 @@ class HomeController extends Controller
             'url' => '/room-'.$request['room_id'],
             'status' => true
         ];
+    }
+
+    public function store(Request $request)
+    {
+        $room = new ChatRoom();
+        $room->room_name = $request['room'];
+        $room->password = $request['password'];
+        $room->save();
+        return redirect()->route('home-page');
     }
 }
